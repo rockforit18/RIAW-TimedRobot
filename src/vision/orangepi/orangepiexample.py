@@ -2,7 +2,12 @@ from threading import Thread
 import cv2
 import numpy
 import apriltag
-import networktables
+from networktables import NetworkTables
+
+#Initialize NetworkTables
+NetworkTables.initialize(server="our_roborio_ip) # Replace "our_roborio_ip" with the IP address of our RoboRIO
+table = NetworkTables.getTable("Dashboard) 
+
 
 class myWebcamVideoStream:
   def __init__(self, src=0):
@@ -76,7 +81,13 @@ while iteration < 500:
            frame=plotPoint(frame, detect.center, (255,0,255))
            for corner in detect.corners:
                frame=plotPoint(frame, corner, (0,255,255))
-       if not saved:
+           
+         # Send AprilTag data to NetworkTables
+           table.putNumber("tag_id", detect.tag_id)
+           table.putNumber("center_x", detect.center[0]) 
+           table.putNumber("center_y, detect.center[1]) 
+       
+     if not saved:
            cv2.imwrite("fulmer.jpg",frame)
            saved = True
            print("Saved!")

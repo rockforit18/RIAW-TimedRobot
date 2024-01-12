@@ -1,7 +1,6 @@
 from threading import Thread
 import cv2
 import numpy
-import apriltag
 from networktables import NetworkTables
 
 #Initialize NetworkTables
